@@ -27,7 +27,61 @@ function lampsAndWallets()
         ->sum();
 }
 
-dump(lampsAndWallets());
+
+
+function shiftId()
+{
+    $shifts = [
+        "sh_st_A7",
+        "bt_df_sh7",
+        "j15",
+        "fj_gj_b75"
+    ];
+
+
+
+    $shiftIds = new Collection($shifts);
+    $shiftIds->map(function ($shift) {
+        return (new Collection(explode('_', $shift)))->end();
+    });
+    return $shiftIds;
+}
+
+function binaryToDecimal($number)
+{
+    return (new collection(str_split($number)))->reverse()->map(function ($value, $key) {
+        return ((2 ** $key) * $value);
+    })->sum();
+}
+
+
+function calculateActivity()
+{
+    $url = 'https://raw.githubusercontent.com/mcarson24/githubscore/master/activity.json';
+
+    $activities = json_decode(file_get_contents($url), true);
+
+    return (new Collection($activities))->pluck('type')->map(function ($value, $key) {
+
+        return (new Collection(['PushEvent' => 1, 'CreateEvent' => 2]))->get($value, 1);
+    })->sum();
+}
+
+
+function formatComment()
+{
+    $comments = ['this is first comment', "this is bolyfci", "how are you man ?"];
+
+    return (new Collection($comments))->map(function ($value) {
+
+        return "_{$value}";
+    })->join("\n");
+}
+//dd(formatComment());
+//dd(calculateActivity());
+//dd(binaryToDecimal("100110101"));
+//dd(shiftId());
+//dump(lampsAndWallets());
 
 
 

@@ -22,14 +22,29 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
     {
         return new static($items);
     }
+
+    public  function join($key = "")
+    {
+        return implode($key, $this->items);
+    }
     public function map(callable $callable)
     {
-        $this->items = array_map($callable, $this->items);
+        $this->items = array_map($callable, $this->items, array_keys($this->items));
+        return $this;
+    }
+    public function reverse()
+    {
+        $this->items = array_reverse($this->items);
         return $this;
     }
     public function filter(callable $callable)
     {
         $this->items = array_filter($this->items, $callable);
+        return $this;
+    }
+    public function unique()
+    {
+        $this->items = array_unique($this->items);
         return $this;
     }
     public function contains($search)
@@ -57,12 +72,25 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate
         $this->items = $result;
         return $this;
     }
+    public function reduce(callable $callable)
+    {
+        return array_reduce($this->items, $callable);
+    }
     public function sum()
     {
         return array_sum($this->items);
     }
+
+    public function end()
+    {
+        return end($this->items);
+    }
     public function toArray()
     {
         return $this->items;
+    }
+    public function get($value, $default = null)
+    {
+        return $this->offsetGet($value)  ?: $default;
     }
 }
