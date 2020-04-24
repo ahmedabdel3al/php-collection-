@@ -3,6 +3,7 @@
 
 
 use App\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 
 require_once __DIR__ . '/vendor/autoload.php';
 //fist lamps and Wallets
@@ -77,6 +78,35 @@ function formatComment()
         return "_{$value}";
     })->join("\n");
 }
+
+function tag()
+{
+    $tags = ['post', 'news', 5, 63, 22];
+    return (new Collection($tags))->map(function ($item) {
+        if (is_numeric($item)) {
+            return $item;
+        }
+        return array_rand([2, 5, 7], 1);
+    })->toArray();
+}
+
+
+function containRecipients()
+{
+    $recipients = [
+        ['message' => 'hello', 'recipients' => ['ahmed', 'mohamed']],
+        ['message' => 'ahmed', 'recipients' => ['abas', 'zaj']],
+        ['message' => 'ahmed', 'recipients' => ['boly', 'ziko']],
+    ];
+
+    // return (new SupportCollection($recipients))->flatMap(function ($message) {
+
+    //     return $message['recipients'];
+    // })->contains('bolys');
+    return (new Collection($recipients))->pluck('recipients')->flatten()->contains('boly');
+}
+dd(tag());
+//dd(containRecipients());
 //dd(formatComment());
 //dd(calculateActivity());
 //dd(binaryToDecimal("100110101"));
